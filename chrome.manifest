@@ -1,0 +1,4 @@
+content	toolbargrippy	content/
+skin	toolbargrippy	classic/1.0	skin/
+
+overlay	chrome://browser/content/browser.xul	chrome://toolbargrippy/content/browserOverlay.xul

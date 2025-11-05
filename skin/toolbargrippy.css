@@ -1,0 +1,58 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+toolbox {
+	-moz-binding: url('chrome://toolbargrippy/content/bindings/toolbar.xml#grippytoolbox');
+}
+  
+toolbox toolbar:not(#TabsToolbar):not(#toolbar-menubar[autohide="true"]) {
+	-moz-binding: url('chrome://toolbargrippy/content/bindings/toolbar.xml#grippytoolbar');
+}
+
+toolbox toolbar[grippy-collapsed="true"] {
+	visibility: collapse !important;
+}
+
+toolbargrippy {
+	-moz-binding: url('chrome://toolbargrippy/content/bindings/toolbar.xml#toolbargrippy');
+	-moz-box-orient: vertical;
+	-moz-box-align: center;
+	border-right: 1px solid ThreeDShadow;
+	width: 10px;
+	padding: 2px 1px;
+	list-style-image: url('chrome://toolbargrippy/skin/tbgrip-arrow.gif');
+}
+
+toolbargrippy:hover {
+	background-color: ThreeDHighlight;
+}
+
+.toolbargrippy-texture {
+	margin-top: 2px;
+	width: 6px;
+	background: url('chrome://toolbargrippy/skin/tbgrip-texture.gif');
+}
+
+toolbargrippy[tbgrippy-collapsed="true"] {
+	-moz-box-orient: horizontal;
+	border-left: 1px solid ThreeDHighlight;
+	border-top: 1px solid ThreeDHighlight;
+	border-right: 1px solid ThreeDShadow;
+	border-bottom: 1px solid ThreeDShadow;
+	width: 40px;
+	height: 10px;
+	padding: 1px 2px;
+	list-style-image: url('chrome://toolbargrippy/skin/tbgrip-arrow-clps.gif');
+}
+
+toolbargrippy[tbgrippy-collapsed="true"] > .toolbargrippy-texture {
+	margin-top: 0;
+	margin-inline-start: 2px;
+	width: 0px;
+	height: 6px;
+}
+
+.collapsed-tray-spacer {
+	border-bottom: 1px solid ThreeDShadow;
+}
