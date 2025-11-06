@@ -10,8 +10,8 @@
 	<binding id="grippytoolbox" extends="chrome://global/content/bindings/toolbar.xml#toolbox">
 		<content orient="vertical">
 			<children />
-			<xul:toolbar id="collapsedTrayToolbar">
-				<xul:hbox tbattr="collapsed-tray-holder" class="collapsed-tray-holder" collapsed="true" xbl:inherits="collapsed=inFullscreen">
+			<xul:toolbar id="collapsedTrayToolbar" collapsed="true">
+				<xul:hbox tbattr="collapsed-tray-holder" class="collapsed-tray-holder" xbl:inherits="collapsed=inFullscreen">
 					<xul:hbox tbattr="collapsed-tray" class="collapsed-tray" />
 					<xul:spacer flex="1" class="collapsed-tray-spacer" />
 				</xul:hbox>
@@ -87,7 +87,7 @@
 					const bookmarksbarEnabled = !chromehidden.includes('directories');
 				
 					const collapsedTray = document.getAnonymousElementByAttribute(this, "tbattr", "collapsed-tray");
-					const collapsedTrayHolder = document.getAnonymousElementByAttribute(this, "tbattr", "collapsed-tray-holder");
+					const collapsedTrayToolbar = document.getElementById('collapsedTrayToolbar');
 					
 					const grippies = collapsedTray.querySelectorAll('toolbargrippy:not([collapsed="true"])');
 					var show = false;
@@ -105,9 +105,9 @@
 					}
 					
 					if(show)
-						collapsedTrayHolder.removeAttribute("collapsed");
+						collapsedTrayToolbar.removeAttribute("collapsed");
 					else
-						collapsedTrayHolder.setAttribute("collapsed", "true");
+						collapsedTrayToolbar.setAttribute("collapsed", "true");
 				]]>
 				</body>
 			</method>
