@@ -6,12 +6,17 @@ toolbox {
 	-moz-binding: url('chrome://toolbargrippy/content/bindings/toolbar.xml#grippytoolbox');
 }
   
-toolbox toolbar:not(#TabsToolbar):not(#toolbar-menubar[autohide="true"]) {
+toolbox toolbar:not(#TabsToolbar):not(#toolbar-menubar[autohide="true"]):not(#collapsedTrayToolbar) {
 	-moz-binding: url('chrome://toolbargrippy/content/bindings/toolbar.xml#grippytoolbar');
 }
 
-toolbox toolbar[grippy-collapsed="true"] {
+toolbox toolbar[grippy-collapsed="true"]:not(#TabsToolbar):not(#toolbar-menubar[autohide="true"]):not(#collapsedTrayToolbar) {
 	visibility: collapse !important;
+}
+
+toolbox toolbar#collapsedTrayToolbar {
+	min-height: 0px !important;
+	padding: 0px !important;
 }
 
 toolbargrippy {
