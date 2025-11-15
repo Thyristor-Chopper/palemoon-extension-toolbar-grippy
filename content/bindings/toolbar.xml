@@ -201,6 +201,7 @@
 				<getter>
 					return this.hasAttribute("moz_grippy_collapsed");
 				</getter>
+				
 				<setter>
 					if(val)
 						this.setAttribute("moz_grippy_collapsed", "true");
