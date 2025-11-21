@@ -31,10 +31,10 @@
 						for(var mut of mutations)
 							if(mut.target.localName == 'toolbar' && mut.target.getAttribute('grippy-collapsed') == 'true') {
 								var grippy = document.getAnonymousElementByAttribute(toolbox, "id", "moz_tb_collapsed_" + mut.target.id);
-								if(mut.target.getAttribute('collapsed') == 'true' || mut.target.getAttribute('hidden') == 'true')
-									grippy.setAttribute('collapsed', 'true');
+								if(mut.target.collapsed || mut.target.hidden)
+									grippy.collapsed = true;
 								else
-									grippy.removeAttribute('collapsed');
+									grippy.collapsed = false;
 								toolbox.toggleCollapsedTray();
 							}
 					});
@@ -80,7 +80,8 @@
 				<![CDATA[
 					const win = document.getElementById('main-window');
 					var chromehidden = [];
-					if(win) chromehidden = (win.getAttribute('chromehidden') || '').split(/\s+/);
+					var ch = win.attributes.chromehidden;
+					if(win) chromehidden = (ch ? ch.value : '').split(/\s+/);
 					const menubarEnabled = !chromehidden.includes('menubar');
 					const toolbarEnabled = !chromehidden.includes('toolbar');
 					const locationbarEnabled = !chromehidden.includes('location');
@@ -135,7 +136,8 @@
 				<body>
 				<![CDATA[
 					const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
-					var existingGrippy = document.getAnonymousElementByAttribute(this, "id", "moz_tb_collapsed_" + aToolbar.id);
+					var id = "moz_tb_collapsed_" + aToolbar.id;
+					var existingGrippy = document.getAnonymousElementByAttribute(this, "id", id);
 					if(!existingGrippy) {
 						var grippy = document.getAnonymousElementByAttribute(aToolbar, "tbattr", "toolbar-grippy");
 						var boxObject = grippy.boxObject.QueryInterface(Components.interfaces.nsIBoxObject);
@@ -148,7 +150,7 @@
 							var tbname = aToolbar.getAttribute("toolbarname");
 							if(tbname)
 								collapsedGrippy.setAttribute("tooltiptext", tbname);
-							collapsedGrippy.setAttribute("id", "moz_tb_collapsed_" + aToolbar.id);
+							collapsedGrippy.setAttribute("id", id);
 							collapsedGrippy.setAttribute("moz_grippy_collapsed", "true");
 							collapsedGrippy.setAttribute("tbgrippy-collapsed", "true");
 							if(disabled) collapsedGrippy.setAttribute('collapsed', 'true');
@@ -183,8 +185,9 @@
 		<implementation>
 			<constructor>
 				<![CDATA[
-					if(this.getAttribute("grippy-collapsed") == "true" && this.parentNode.localName == "toolbox")
-						this.parentNode.collapseToolbar(this, this.getAttribute("collapsed") == 'true' || this.getAttribute("hidden") == 'true');
+					var parentNode = this.parentNode;
+					if(this.getAttribute("grippy-collapsed") == "true" && parentNode.localName == "toolbox")
+						parentNode.collapseToolbar(this, this.collapsed || this.hidden);
 				]]>
 			</constructor>
 		</implementation>
@@ -196,6 +199,7 @@
 			<xul:spacer class="toolbargrippy-texture" flex="1" />
 		</content>
 
+		<!--
 		<implementation>
 			<property name="grippycollapsed">
 				<getter>
@@ -217,7 +221,7 @@
 				<body>
 				<![CDATA[
 					var node = this.parentNode;
-					while(node && node.localName != "window" && (node.localName != aNodeA && (node.localName != aNodeB))) {
+					while(node && node.localName != "window" && node.localName != aNodeA && node.localName != aNodeB) {
 						node = node.parentNode;
 					}
 					return node;
@@ -225,13 +229,17 @@
 				</body>
 			</method>
 		</implementation>
+		-->
 
 		<handlers>
 			<handler event="command">
 			<![CDATA[
-				var toolbox = this.returnNode("toolbox");
-				var toolbar = this.returnNode("toolbar", "menubar");
-				if(this.grippycollapsed)
+				var isCollapsed = this.attributes["moz_grippy_collapsed"];
+				var toolbar = this.parentElement;  // this.returnNode("toolbar", "menubar");
+				if(isCollapsed) toolbar = toolbar.parentElement.parentElement;
+				var toolbox = toolbar.parentElement;  // this.returnNode("toolbox");
+				// if(this.grippycollapsed)
+				if(isCollapsed)
 					toolbox.expandToolbar(this.id);
 				else
 					toolbox.collapseToolbar(toolbar, false);
